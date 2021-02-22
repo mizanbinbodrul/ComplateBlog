@@ -73,6 +73,12 @@
                     </li>
 
                     <li class="header">System</li>
+                    <li class="{{Request::is('admin/setting') ? 'active' : '' }}">
+                        <a href="{{ route('admin.setting') }}">
+                            <i class="material-icons">settings</i>
+                            <span>Settings</span>
+                        </a>
+                    </li>
                     <li>
                     <a class="dropdown-item" href="{{ route('logout') }}"
                                 onclick="event.preventDefault();

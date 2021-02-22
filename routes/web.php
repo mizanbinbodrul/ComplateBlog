@@ -26,6 +26,7 @@ Route::group(['as'=> 'admin.','prefix'=>'admin', 'middleware'=>['auth','admin']]
 {
     Route::get('dashboard', 'App\Http\Controllers\Admin\DashboardController@index')->name('dashboard');
     Route::resource('tag', 'App\Http\Controllers\Admin\TagController');
+    Route::get('setting', 'App\Http\Controllers\Admin\SettingController@index')->name('setting');
     Route::resource('category', 'App\Http\Controllers\Admin\CategoryController');
     Route::resource('post', 'App\Http\Controllers\Admin\PostController');
 

@@ -78,6 +78,25 @@
                                     <td>{{ $post->created_at ? $post->created_at : "N/A" }}</td>
                                     {{-- <td>{{  $post->updated_at ? $post->updated_at : "N/A" }}</td> --}}
                                     <td class="d-flex">
+                                        @if ($post->is_approved == false)
+
+    <button type="button" class="btn btn-success waves-effect pull-right" onclick="approvePost({{ $post->id }})">
+        <i class="material-icons">done</i>
+        <span>Approve</span>
+    </button>
+    <form method="POST" id="approval-form" style="display: none;" action="{{ route('admin.post.approve',$post->id) }}">
+        @csrf
+        @method("PUT")
+    </form>
+
+    @else
+
+    <button type="button" class="btn btn-success pull-right">
+        <i class="material-icons">done</i>
+        <span>Approved</span>
+    </button>
+
+    @endif
                                         <a href="{{ route('admin.post.edit', $post->id) }}"
                                             class="btn btn-info waves-effect"> <i class="material-icons">edit</i> </a>
                                              <a href="{{ route('admin.post.show', $post->id) }}"
@@ -92,6 +111,7 @@
                                             @method('DELETE')
 
                                         </form>
+
 
                                     </td>
 
@@ -159,5 +179,39 @@
         })
 
     }
+    function approvePost($id) {
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            })
+
+            swalWithBootstrapButtons.fire({
+                title: 'Are you sure?',
+                text: "You want to approve this post",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, Approve it!',
+                cancelButtonText: 'No, cancel!',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    event.preventDefault();
+                    document.getElementById('approval-form').submit();
+                } else if (
+                    /* Read more about handling dismissals below */
+                    result.dismiss === Swal.DismissReason.cancel
+                ) {
+                    swalWithBootstrapButtons.fire(
+                        'Cancelled',
+                        'The post remain pending :)',
+                        'info'
+                    )
+                }
+            })
+
+        }
 </script>
 @endpush

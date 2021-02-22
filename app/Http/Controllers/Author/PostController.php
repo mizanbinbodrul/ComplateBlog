@@ -1,22 +1,20 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Author;
 
 use App\Http\Controllers\Controller;
-use App\Models\Category;
 use App\Models\Post;
-use App\Models\Subscriber;
+use App\Models\Category;
+use App\Models\User;
 use App\Models\Tag;
-use App\Notifications\AuthorPostApprove;
-use Brian2694\Toastr\Facades\Toastr;
 use App\Notifications\NewAuthorPost;
-use App\Notifications\NewPostNotify;
-use Intervention\Image\Facades\Image;
+use App\Notifications\AuthorPostApprove;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Auth;
+use Brian2694\Toastr\Facades\Toastr;
+use Intervention\Image\Facades\Image;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
-use Illuminate\Notifications\Notifiable;
 
 class PostController extends Controller
 {
@@ -27,8 +25,8 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::all();
-        return view('admin.post.index', compact('posts'));
+        $posts = Auth::user()->posts()->latest()->get();
+        return view('author.post.index', compact('posts'));
     }
 
     /**
@@ -39,8 +37,8 @@ class PostController extends Controller
     public function create()
     {
         $categories = Category::all();
-        $tag = Tag::all();
-        return view('admin.post.create', compact('categories','tag'));
+        $tag      = Tag::all();
+        return view('author.post.create', compact('categories','tag'));
     }
 
     /**
@@ -51,7 +49,7 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request,[
+        $this->validate($request, [
             'title'     => 'required',
             'image'      => 'required',
             'categories' => 'required',
@@ -60,8 +58,7 @@ class PostController extends Controller
         ]);
         $image = $request->file('image');
         $slug  = str_slug($request->title);
-        if (isset($image))
-        {
+        if (isset($image)) {
             // MAKE UNIQUE NAME FOR IMAGE
             $imagename = time() . '.' . $request->image->extension();
 
@@ -73,8 +70,7 @@ class PostController extends Controller
             // RESIZE IMAGE FOR CATEGORY AND UPLOAD
             $postImage = Image::make($image)->resize(1600, 1066)->save();
             Storage::disk('public')->put('post/' . $imagename, $postImage);
-
-        } else{
+        } else {
             $imagename = 'default.png';
         }
 
@@ -84,26 +80,21 @@ class PostController extends Controller
         $post->slug = $slug;
         $post->image = $imagename;
         $post->body = $request->body;
-        if(isset($request->status))
-        {
+        if (isset($request->status)) {
             $post->status = true;
-        }else{
+        } else {
             $post->status = false;
         }
-        $post->is_approved = true;
+        $post->is_approved = false;
         $post->save();
-
+        $
         $post->categories()->attach($request->categories);
         $post->tags()->attach($request->tags);
-
-        $subscribers = Subscriber::all();
-        foreach($subscribers as $subscriber)
-        {
-            Notification::route('mail',$subscriber->email)->notify(new NewPostNotify($post));
-        }
+        $users = User::where('role_id', 1)->get();
+        Notification::send($users, new NewAuthorPost($post));
 
         Toastr::success('Post Successfully Saved', 'Success');
-        return redirect()->route('admin.post.index');
+        return redirect()->route('author.post.index');
     }
 
     /**
@@ -114,7 +105,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        return view('admin.post.show', compact('post'));
+        return view('author.post.show', compact('post'));
     }
 
     /**
@@ -127,7 +118,7 @@ class PostController extends Controller
     {
         $tag = Tag::all();
         $categories = Category::all();
-        return view('admin.post.edit',compact('post', 'categories','tag'));
+        return view('author.post.edit', compact('post', 'categories', 'tag'));
     }
 
     /**
@@ -158,9 +149,8 @@ class PostController extends Controller
                 Storage::disk('public')->makeDirectory('post');
             }
 
-            if(Storage::disk('public')->exists('post/'.$post->image)){
-                Storage::disk('public')->delete('post/'.$post->image);
-
+            if (Storage::disk('public')->exists('post/' . $post->image)) {
+                Storage::disk('public')->delete('post/' . $post->image);
             }
 
             // RESIZE IMAGE FOR CATEGORY AND UPLOAD
@@ -179,14 +169,14 @@ class PostController extends Controller
         } else {
             $post->status = false;
         }
-        $post->is_approved = true;
+        $post->is_approved = false;
         $post->save();
 
         $post->categories()->sync($request->categories);
         $post->tags()->sync($request->tags);
 
         Toastr::success('Post Successfully Updated', 'Success');
-        return redirect()->route('admin.post.index');
+        return redirect()->route('author.post.index');
     }
 
     /**
@@ -203,34 +193,7 @@ class PostController extends Controller
         $post->categories()->detach();
         $post->tags()->detach();
         $post->delete();
-        Toastr::success('Category Successfully Deleted', 'Success');
-        return redirect()->back();
-    }
-
-    public function pending()
-    {
-        $posts = Post::where('is_approved', false)->get();
-        return view('admin.post.pending', compact('posts'));
-    }
-
-    public function approval($id)
-    {
-        $post = Post::find($id);
-        if($post->is_approved == false)
-        {
-            $post->is_approved = true;
-            $post->save();
-            $post->user->notify(new AuthorPostApprove($post));
-            $subscribers = Subscriber::all();
-            foreach ($subscribers as $subscriber) {
-                Notification::route('mail', $subscriber->email)->notify(new NewPostNotify($post));
-            }
-            Toastr::success('Post Successfully Approved', 'Success');
-
-        } else {
-            Toastr::info('This post is already Approved', 'Success');
-
-        }
+        Toastr::success('Post Successfully Deleted', 'Success');
         return redirect()->back();
     }
 }

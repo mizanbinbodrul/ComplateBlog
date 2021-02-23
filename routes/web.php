@@ -28,6 +28,7 @@ Route::group(['as'=> 'admin.','prefix'=>'admin', 'middleware'=>['auth','admin']]
     Route::resource('tag', 'App\Http\Controllers\Admin\TagController');
     Route::get('setting', 'App\Http\Controllers\Admin\SettingController@index')->name('setting');
     Route::put('update-profile', 'App\Http\Controllers\Admin\SettingController@updateProfile')->name('profile.update');
+    Route::put('update-password', 'App\Http\Controllers\Admin\SettingController@updatePassword')->name('password.update');
 
 
     Route::resource('category', 'App\Http\Controllers\Admin\CategoryController');

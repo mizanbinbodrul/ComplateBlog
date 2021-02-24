@@ -74,7 +74,7 @@
                                     @else
                                     <a href="javascript:void(0);" onclick="document.getElementById('favorite-form-{{$post->id}}').submit();" class="{{
 
-                                            !Auth::user()->favorit_posts->where('pivot.post_id',$post->id)->count() == 0 ? 'favorit_posts' : ''}}">
+                                            !Auth::user()->favorite_posts->where('pivot.post_id',$post->id)->count() == 0 ? 'favorit_posts' : ''}}">
                                         <i class="ion-heart"></i>
                                         {{$post->favorit_to_user->count()}}</a>
 

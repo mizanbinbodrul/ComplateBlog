@@ -43,12 +43,16 @@ Route::group(['as'=> 'admin.','prefix'=>'admin', 'middleware'=>['auth','admin']]
     Route::get('pending/post', 'App\Http\Controllers\Admin\PostController@pending')->name('post.pending');
     Route::put('/post/{id}/approve', 'App\Http\Controllers\Admin\PostController@approval')->name('post.approve');
 
+    Route::get('/favorite', 'App\Http\Controllers\Admin\FavoriteController@index')->name('favorite.index');
+
     Route::get('/subscriber', 'App\Http\Controllers\Admin\SubscriberController@index')->name('subscriber.index');
     Route::delete('/subscriber/{subscriber}', 'App\Http\Controllers\Admin\SubscriberController@destroy')->name('subscriber.destroy');
 });
 Route::group(['as'=> 'author.','prefix'=>'author', 'middleware'=>['auth','author']], function()
 {
     Route::get('dashboard', 'App\Http\Controllers\Author\DashboardController@index')->name('dashboard');
+
+    Route::get('/favorite', 'App\Http\Controllers\Author\FavoriteController@index')->name('favorite.index');
 
     Route::get('setting', 'App\Http\Controllers\Author\SettingController@index')->name('setting');
     Route::put('update-profile', 'App\Http\Controllers\Author\SettingController@updateProfile')->name('profile.update');

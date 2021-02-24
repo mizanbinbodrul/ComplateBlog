@@ -12,18 +12,18 @@ class favoriteController extends Controller
    public function add($post)
    {
         $user = Auth::user();
-        $isFavorite = $user->favorit_posts()->where('post_id',$post)->count();
+        $isFavorite = $user->favorite_posts()->where('post_id',$post)->count();
 
         if($isFavorite == 0)
 
         {
-            $user->favorit_posts()->attach($post);
+            $user->favorite_posts()->attach($post);
             Toastr::success('Post successfully added in your favorite list', 'Success');
             return redirect()->back();
         } else
 
         {
-            $user->favorit_posts()->detach($post);
+            $user->favorite_posts()->detach($post);
             Toastr::success('Post successfully removed in your favorite list', 'Success');
             return redirect()->back();
         }

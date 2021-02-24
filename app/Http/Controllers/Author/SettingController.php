@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Author;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -15,7 +15,7 @@ class SettingController extends Controller
 {
     public function index()
     {
-        return view('admin.setting');
+        return view('author.setting');
     }
 
     public function updateProfile(Request $request)
@@ -73,29 +73,24 @@ class SettingController extends Controller
 
         $hashedPassword = Auth::user()->password;
 
-        if(Hash::check($request->old_password,$hashedPassword))
+        if (Hash::check($request->old_password, $hashedPassword)) {
 
-         {
+            if (!Hash::check($request->password, $hashedPassword)) {
+                $user = User::find(Auth::id());
+                $user->password = Hash::make($request->password);
+                $user->save();
+                Toastr::success('Password Successfully Changed', 'Success');
+                Auth::logout();
+                return redirect()->back();
+            } else {
 
-                    if(!Hash::check($request->password,$hashedPassword))
-                    {
-                        $user = User::find(Auth::id());
-                        $user->password = Hash::make($request->password);
-                        $user->save();
-                        Toastr::success('Password Successfully Changed', 'Success');
-                        Auth::logout();
-                        return redirect()->back();
-                    } else {
-
-                        Toastr::error('New Password cannot be the same as old password', 'Error');
-                        return redirect()->back();
-                    }
+                Toastr::error('New Password cannot be the same as old password', 'Error');
+                return redirect()->back();
+            }
         } else {
 
-        Toastr::error('Current Password not Match', 'Error');
-        return redirect()->back();
+            Toastr::error('Current Password not Match', 'Error');
+            return redirect()->back();
+        }
     }
 }
-
-}
-

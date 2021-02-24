@@ -45,5 +45,9 @@ Route::group(['as'=> 'admin.','prefix'=>'admin', 'middleware'=>['auth','admin']]
 Route::group(['as'=> 'author.','prefix'=>'author', 'middleware'=>['auth','author']], function()
 {
     Route::get('dashboard', 'App\Http\Controllers\Author\DashboardController@index')->name('dashboard');
+
+    Route::get('setting', 'App\Http\Controllers\Author\SettingController@index')->name('setting');
+    Route::put('update-profile', 'App\Http\Controllers\Author\SettingController@updateProfile')->name('profile.update');
+    Route::put('update-password', 'App\Http\Controllers\Author\SettingController@updatePassword')->name('password.update');
     Route::resource('post', 'App\Http\Controllers\Author\PostController');
 });

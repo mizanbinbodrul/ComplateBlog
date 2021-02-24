@@ -1,5 +1,5 @@
 <?php
-
+use App\Http\Controllers;
 use Illuminate\Support\Facades\Route;
 
 
@@ -22,6 +22,12 @@ Route::post('subscriber', 'App\Http\Controllers\SubscriberController@store')->na
 Auth::routes();
 
 
+Route::group(['middleware'=>['auth']], function (){
+
+    Route::post('favorite/{post}/add', 'App\Http\Controllers\favoriteController@add')->name('post.favorite');
+
+});
+
 Route::group(['as'=> 'admin.','prefix'=>'admin', 'middleware'=>['auth','admin']], function()
 {
     Route::get('dashboard', 'App\Http\Controllers\Admin\DashboardController@index')->name('dashboard');
@@ -39,8 +45,6 @@ Route::group(['as'=> 'admin.','prefix'=>'admin', 'middleware'=>['auth','admin']]
 
     Route::get('/subscriber', 'App\Http\Controllers\Admin\SubscriberController@index')->name('subscriber.index');
     Route::delete('/subscriber/{subscriber}', 'App\Http\Controllers\Admin\SubscriberController@destroy')->name('subscriber.destroy');
-
-
 });
 Route::group(['as'=> 'author.','prefix'=>'author', 'middleware'=>['auth','author']], function()
 {

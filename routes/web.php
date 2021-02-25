@@ -23,10 +23,10 @@ Auth::routes();
 
 Route::get('post/{slug}', 'App\Http\Controllers\PostController@details')->name('post.details');
 Route::get('posts', 'App\Http\Controllers\PostController@index')->name('post.index');
+
 Route::group(['middleware'=>['auth']], function (){
-
     Route::post('favorite/{post}/add', 'App\Http\Controllers\favoriteController@add')->name('post.favorite');
-
+    Route::post('comment/{post}/add', 'App\Http\Controllers\CommnentController@store')->name('comment.store');
 });
 
 Route::group(['as'=> 'admin.','prefix'=>'admin', 'middleware'=>['auth','admin']], function()
@@ -45,6 +45,8 @@ Route::group(['as'=> 'admin.','prefix'=>'admin', 'middleware'=>['auth','admin']]
     Route::put('/post/{id}/approve', 'App\Http\Controllers\Admin\PostController@approval')->name('post.approve');
 
     Route::get('/favorite', 'App\Http\Controllers\Admin\FavoriteController@index')->name('favorite.index');
+
+    Route::get('comments/', 'App\Http\Controllers\Admin\ommentController@destroy')->name('comment.destroy');
 
     Route::get('/subscriber', 'App\Http\Controllers\Admin\SubscriberController@index')->name('subscriber.index');
     Route::delete('/subscriber/{subscriber}', 'App\Http\Controllers\Admin\SubscriberController@destroy')->name('subscriber.destroy');

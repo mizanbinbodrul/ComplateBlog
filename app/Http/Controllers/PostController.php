@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\Category;
 use App\Models\Post;
 use Session;
 use Illuminate\Support\Facades\Auth;
@@ -14,6 +15,8 @@ class PostController extends Controller
         $posts = Post::paginate(6);
         return view('postcategory', compact('posts'));
     }
+
+
 
 
 

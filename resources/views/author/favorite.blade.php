@@ -48,8 +48,7 @@
                                     <td>
 
 
-                                             <a href="{{ route('admin.post.show', $post->id) }}"
-                                            class="btn btn-info waves-effect"> <i class="material-icons">visibility</i> </a>
+
                                         <button class="btn btn-danger waves-effect" type="button"
                                             onclick="removePost({{ $post->id }})">
                                             <i class="material-icons">delete</i></button>

@@ -21,7 +21,8 @@ Route::get('/', 'App\Http\Controllers\HomeController@index')->name('home');
 Route::post('subscriber', 'App\Http\Controllers\SubscriberController@store')->name('subscriber.store');
 Auth::routes();
 
-
+Route::get('post/{slug}', 'App\Http\Controllers\PostController@details')->name('post.details');
+Route::get('posts', 'App\Http\Controllers\PostController@index')->name('post.index');
 Route::group(['middleware'=>['auth']], function (){
 
     Route::post('favorite/{post}/add', 'App\Http\Controllers\favoriteController@add')->name('post.favorite');

@@ -87,7 +87,6 @@ class PostController extends Controller
         }
         $post->is_approved = false;
         $post->save();
-        $
         $post->categories()->attach($request->categories);
         $post->tags()->attach($request->tags);
         $users = User::where('role_id', 1)->get();

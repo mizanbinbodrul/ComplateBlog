@@ -88,6 +88,8 @@
                                     @endguest
 
                                 </li>
+                                <li><a href="#"><i class="ion-chatbubble"></i>{{$posts->comments->count()}}</a></li>
+                                <li><a href="#"><i class="ion-eye"></i>{{$posts->view_count}}</a></li>
 							</ul>
 
 							<ul class="icons">
@@ -162,7 +164,7 @@
 
 							<div class="blog-info">
 
-								<h4 class="title"><a href="#"><b>{{$randompost->title}}</b></a></h4>
+								<h4 class="title"><a href="{{ route('post.details', $randompost->slug) }}"><b>{{$randompost->title}}</b></a></h4>
 
 								<ul class="post-footer">
 									<li>

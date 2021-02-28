@@ -14,6 +14,7 @@ class Category extends Model
         'image',
     ];
 
+
     public function posts()
     {
         return $this->belongsToMany('App\Models\Post')->withTimestamps();

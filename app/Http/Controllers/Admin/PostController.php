@@ -203,7 +203,7 @@ class PostController extends Controller
         $post->categories()->detach();
         $post->tags()->detach();
         $post->delete();
-        Toastr::success('Category Successfully Deleted', 'Success');
+        Toastr::success('Post Successfully Deleted', 'Success');
         return redirect()->back();
     }
 

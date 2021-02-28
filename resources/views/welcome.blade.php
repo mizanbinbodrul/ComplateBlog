@@ -109,29 +109,6 @@
 
 <!-- THIS IS JS AREA SECTION -->
 @push('js')
-<script>
-    const swiper = new Swiper('.swiper-container', {
-  // Optional parameters
-        direction: 'vertical',
-        loop: true,
-        initialSlide:
 
-        // If we need pagination
-        pagination: {
-            el: '.swiper-pagination',
-        },
-
-        // Navigation arrows
-        navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
-        },
-
-        // And if we need scrollbar
-        scrollbar: {
-            el: '.swiper-scrollbar',
-        },
-        });
-</script>
 
 @endpush

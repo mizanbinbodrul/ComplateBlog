@@ -45,7 +45,6 @@ Route::group(['as'=> 'admin.','prefix'=>'admin', 'middleware'=>['auth','admin']]
     // THIS IS FOR CATEGORY
     Route::resource('category', 'App\Http\Controllers\Admin\CategoryController');
     Route::resource('post', 'App\Http\Controllers\Admin\PostController');
-
     // THIS IS FOR PENDIING POST
     Route::get('pending/post', 'App\Http\Controllers\Admin\PostController@pending')->name('post.pending');
     Route::put('/post/{id}/approve', 'App\Http\Controllers\Admin\PostController@approval')->name('post.approve');

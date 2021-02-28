@@ -27,7 +27,7 @@
         <div class="container">
 
             <div class="row">
-                @if ($category->posts->count() > 0)
+                @if ($posts->count() > 0)
 
 
                     @foreach($category->posts as $post)

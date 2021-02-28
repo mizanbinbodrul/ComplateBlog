@@ -236,7 +236,7 @@
 
                     @if($posts->comments->count() > 0)
                         @foreach ($posts->comments as $commnet)
-                    	<div class="commnets-area">
+                    	<div class="commnets-area" id="post-comments">
 
 						<div class="comment">
 

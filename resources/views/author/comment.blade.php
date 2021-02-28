@@ -29,6 +29,13 @@
                                     <th class="text-center">Action</th>
                                 </tr>
                                 </thead>
+                                <tfoot>
+                                <tr>
+                                    <th class="text-center">Comments Info</th>
+                                    <th class="text-center">Post Info</th>
+                                    <th class="text-center">Action</th>
+                                </tr>
+                                </tfoot>
                                 <tbody>
                                     @foreach($posts as $key=>$post)
                                         @foreach($post->comments as $comment)
